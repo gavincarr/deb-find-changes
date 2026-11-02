@@ -1,7 +1,7 @@
 Source: deb-find-changes
 Section: admin
 Priority: optional
-Maintainer: Gavin Carr <gavin@profound.net>
+Maintainer: Gavin Carr <gavin@openfusion.net>
 Build-Depends: debhelper-compat (= 13)
 Standards-Version: 4.6.2
 Rules-Requires-Root: no

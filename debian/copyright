@@ -1,9 +1,9 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: deb-find-changes
-Upstream-Contact: Gavin Carr <gavin@profound.net>
+Upstream-Contact: Gavin Carr <gavin@openfusion.net>
 
 Files: *
-Copyright: 2026 Gavin Carr <gavin@profound.net>
+Copyright: 2026 Gavin Carr <gavin@openfusion.net>
 License: GPL-3+
 
 License: GPL-3+
