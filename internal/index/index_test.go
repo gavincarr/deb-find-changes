@@ -177,17 +177,17 @@ func TestHasHash(t *testing.T) {
 }
 
 func TestLoadRealSystem(t *testing.T) {
-	if _, err := os.Stat("/var/lib/dpkg/status"); err != nil {
-		t.Skip("no dpkg database")
+	if _, err := os.Stat("/var/lib/dpkg/info/bash.list"); err != nil {
+		t.Skip("no dpkg database with bash installed")
 	}
 	ix, _, err := Load("/var/lib/dpkg", "/var/lib/ucf")
 	if err != nil {
-		t.Skip(err)
+		t.Fatal(err)
 	}
 	for _, c := range ix.Lookup("/etc/bash.bashrc") {
 		if c.Package == "bash" && c.HasHash() {
 			return
 		}
 	}
-	t.Skip("bash claim for /etc/bash.bashrc not found (not Debian-like?)")
+	t.Fatalf("no hashed bash claim for /etc/bash.bashrc: %v", ix.Lookup("/etc/bash.bashrc"))
 }
