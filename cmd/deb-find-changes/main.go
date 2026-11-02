@@ -153,6 +153,7 @@ func execute(cli *CLI, stdout, stderr io.Writer) int {
 		log.Warn(w)
 	}
 
+	log.Info("loaded dpkg state", "packages", ix.Packages(), "paths", ix.Paths())
 	log.Info("scanning", "trees", trees)
 	entries, err := scan.Scan(scan.Options{
 		Root:        root,
@@ -168,15 +169,6 @@ func execute(cli *CLI, stdout, stderr io.Writer) int {
 		log.Error("scan failed", "err", err)
 		return 1
 	}
-	var nm, no int
-	for _, e := range entries {
-		if e.Kind == scan.Modified {
-			nm++
-		} else {
-			no++
-		}
-	}
-	log.Info("scan complete", "modified", nm, "orphans", no)
 
 	if cli.Output != "" {
 		err = output.WriteFileAtomic(cli.Output, 0o600, func(w io.Writer) error {

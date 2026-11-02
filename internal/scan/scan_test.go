@@ -75,6 +75,11 @@ func TestScanBasic(t *testing.T) {
 	if !strings.Contains(buf.String(), "no checksum recorded") || !strings.Contains(buf.String(), "level=WARN") {
 		t.Errorf("missing warn: %s", buf)
 	}
+	for _, w := range []string{`level=INFO msg="scan complete"`, "files=4", "modified=2", "orphans=1"} {
+		if !strings.Contains(buf.String(), w) {
+			t.Errorf("missing %q in %s", w, buf)
+		}
+	}
 }
 
 func TestScanKinds(t *testing.T) {

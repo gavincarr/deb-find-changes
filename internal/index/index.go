@@ -47,6 +47,22 @@ func (ix *Index) Add(path string, c Claim) {
 	ix.m[path] = append(cs, c)
 }
 
+// Paths returns the number of distinct paths with at least one claim.
+func (ix *Index) Paths() int { return len(ix.m) }
+
+// Packages returns the number of distinct non-empty package names.
+func (ix *Index) Packages() int {
+	pkgs := map[string]bool{}
+	for _, cs := range ix.m {
+		for _, c := range cs {
+			if c.Package != "" {
+				pkgs[c.Package] = true
+			}
+		}
+	}
+	return len(pkgs)
+}
+
 // Lookup returns the claims on path.
 func (ix *Index) Lookup(path string) []Claim { return ix.m[path] }
 

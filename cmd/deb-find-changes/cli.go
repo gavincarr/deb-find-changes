@@ -20,7 +20,7 @@ type CLI struct {
 	Warnings       bool     `name:"warnings" short:"w" negatable:"" default:"true" help:"Emit warnings."`
 	Admindir       string   `name:"admindir" default:"/var/lib/dpkg" help:"dpkg administrative directory."`
 	UcfDir         string   `name:"ucf-dir" default:"/var/lib/ucf" help:"ucf state directory."`
-	Root           string   `name:"root" hidden:"" help:"Re-root all system paths (testing only)."`
+	Root           string   `name:"root" hidden:"" help:"Re-root the scanned trees (testing only)."`
 	Version        bool     `name:"version" help:"Print version and exit."`
 
 	Paths []string `arg:"" optional:"" name:"path" help:"Directories to scan."`

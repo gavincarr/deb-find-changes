@@ -191,3 +191,14 @@ func TestLoadRealSystem(t *testing.T) {
 	}
 	t.Fatalf("no hashed bash claim for /etc/bash.bashrc: %v", ix.Lookup("/etc/bash.bashrc"))
 }
+
+func TestPackagesAndPaths(t *testing.T) {
+	ix := New()
+	ix.Add("/a", Claim{Package: "p"})
+	ix.Add("/a", Claim{Package: "q"})
+	ix.Add("/b", Claim{Package: "p"})
+	ix.Add("/c", Claim{Package: ""})
+	if ix.Packages() != 2 || ix.Paths() != 3 {
+		t.Errorf("Packages=%d Paths=%d", ix.Packages(), ix.Paths())
+	}
+}

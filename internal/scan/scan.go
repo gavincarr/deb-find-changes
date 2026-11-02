@@ -57,6 +57,7 @@ func Scan(o Options) ([]Entry, error) {
 	}
 	seen := map[string]bool{}
 	var out []Entry
+	checked := 0
 	for _, tree := range o.Trees {
 		root := o.Root + tree
 		err := walk(root, func(real string, d fs.DirEntry, err error) error {
@@ -90,6 +91,7 @@ func Scan(o Options) ([]Entry, error) {
 			} else if !d.Type().IsRegular() {
 				return nil
 			}
+			checked++
 			var claims []index.Claim
 			all := o.Index.Lookup(logical)
 			for _, c := range all {
@@ -112,6 +114,15 @@ func Scan(o Options) ([]Entry, error) {
 			return nil, err
 		}
 	}
+	var nm, no int
+	for _, e := range out {
+		if e.Kind == Modified {
+			nm++
+		} else {
+			no++
+		}
+	}
+	s.log.Info("scan complete", "files", checked, "modified", nm, "orphans", no)
 	sort.Slice(out, func(i, j int) bool { return out[i].Path < out[j].Path })
 	return out, nil
 }
