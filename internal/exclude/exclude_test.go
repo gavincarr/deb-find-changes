@@ -35,6 +35,10 @@ func TestMatch(t *testing.T) {
 		{"/etc/a+b(1)", "/etc/a+b(1)", true},
 		{"/etc/a+b(1)", "/etc/aab(1)", false},
 		{"a]b", "/etc/a]b", true},
+		{"café", "/etc/café", true},
+		{"café", "/etc/cafe", false},
+		{"/etc/café", "/etc/café", true},
+		{"/etc/café", "/etc/café/x", true},
 		{Builtin[0], "/etc/x.conf.dpkg-dist", true},
 		{Builtin[6], "/etc/x.ucf-old", true},
 	}

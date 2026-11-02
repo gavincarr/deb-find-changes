@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"unicode/utf8"
 )
 
 // Pattern is a single exclude glob. Source is "" and Line 0 for -x
@@ -124,7 +125,9 @@ func translate(g string) (string, error) {
 			b.WriteString("[" + strings.ReplaceAll(class, `\`, `\\`) + "]")
 			i = end
 		default:
-			b.WriteString(regexp.QuoteMeta(string(c)))
+			r, size := utf8.DecodeRuneInString(g[i:])
+			b.WriteString(regexp.QuoteMeta(string(r)))
+			i += size - 1
 		}
 	}
 	return b.String(), nil
