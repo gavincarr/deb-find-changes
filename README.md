@@ -8,15 +8,17 @@ not fully account for:
   dpkg (or ucf) recorded, or that can't be verified.
 
 It is the Debian counterpart of
-[rpm-find-changes](../rpm-find-changes) and is meant to feed `extract`, the
-backup tool that saves just the locally-changed files. It reads the dpkg
-and ucf databases directly rather than running `dpkg` per file.
+[rpm-find-changes](https://github.com/gavincarr/rpm-find-changes) and is
+meant to feed `extract`, the backup tool that saves just the
+locally-changed files. It reads the dpkg and ucf databases directly rather
+than running `dpkg` per file.
 
 ## Usage
 
 ```
 deb-find-changes [flags] <path> [<path> ...]
 
+deb-find-changes /etc                     # orphaned and modified files
 deb-find-changes -t /etc                  # M/O-prefixed list
 deb-find-changes -o /etc                  # orphans only
 deb-find-changes -m /etc                  # modified only
@@ -42,30 +44,9 @@ files are backed up, for restore fidelity and parity with rpm-find-changes.
 Uncomment lines to keep them out of the backup (and out of extract's git
 history). This can't catch secrets embedded in ordinary config files.
 
-## Build
+## Author
 
-```
-scripts/build_all.sh        # static binary in bin/deb-find-changes
-go test ./...
-```
-
-## Packaging
-
-```
-scripts/deb_tarball.sh      # dist/deb/deb-find-changes_<version>.tar.gz
-```
-
-Then, on the `repo` build machine:
-
-```
-tar xzf deb-find-changes_<version>.tar.gz
-cd deb-find-changes-<version>
-dpkg-buildpackage -b -us -uc
-```
-
-The `.deb` is amd64 only and zstd-compressed (Debian 12 / Ubuntu 22.04 or
-newer). Releases are cut with `scripts/release.sh <version>` after adding a
-`debian/changelog` stanza; it tags locally and never pushes.
+Gavin Carr <gavin@openfusion.net>
 
 ## Licence
 
