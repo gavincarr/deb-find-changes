@@ -191,7 +191,8 @@ reviews):
 .svn/
 .bzr/
 .hg/
-core*
+core
+core.[0-9]*
 
 # Generated / cache / runtime state
 /etc/alternatives
@@ -295,7 +296,8 @@ Follow the owner's standard Go conventions (skills `go-stack` and
   - `/usr/bin/deb-find-changes`
   - `/etc/deb-find-changes/exclude-etc` (conffile)
   - `/etc/cron.d/deb-find-changes` (conffile):
-    `0 0 * * * root /usr/bin/deb-find-changes --no-warnings --exclude-from=/etc/deb-find-changes/exclude-etc -O /var/cache/deb-find-changes/etc.txt /etc`
+    `0 0 * * * root [ -x /usr/bin/deb-find-changes ] && /usr/bin/deb-find-changes --no-warnings --exclude-from=/etc/deb-find-changes/exclude-etc -O /var/cache/deb-find-changes/etc.txt /etc`
+    (guard added per Debian Policy §9.5)
   - `/var/cache/deb-find-changes/` (directory)
   - a man page (generated from the help text or a hand-written page;
     builder's choice)

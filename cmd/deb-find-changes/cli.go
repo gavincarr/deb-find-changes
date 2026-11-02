@@ -12,9 +12,9 @@ type CLI struct {
 	ShowModified   bool     `name:"show-modified" short:"m" help:"Show modified files."`
 	ShowOrphans    bool     `name:"show-orphans" short:"o" help:"Show orphaned files."`
 	Type           bool     `name:"type" short:"t" aliases:"show-type" help:"Prefix each file with its type."`
-	Exclude        []string `name:"exclude" short:"x" help:"Exclude files matching this glob (repeatable)."`
-	ExcludeFrom    []string `name:"exclude-from" help:"Read exclude globs from this file (repeatable)."`
-	ExcludePackage []string `name:"exclude-package" aliases:"exclude-pkg" help:"Exclude files owned by this package (repeatable)."`
+	Exclude        []string `sep:"none" name:"exclude" short:"x" help:"Exclude files matching this glob (repeatable)."`
+	ExcludeFrom    []string `sep:"none" name:"exclude-from" help:"Read exclude globs from this file (repeatable)."`
+	ExcludePackage []string `sep:"none" name:"exclude-package" aliases:"exclude-pkg" help:"Exclude files owned by this package (repeatable)."`
 	Output         string   `name:"output" short:"O" help:"Write output to this file instead of stdout."`
 	Verbose        int      `name:"verbose" short:"v" type:"counter" help:"Increase verbosity (repeatable)."`
 	Warnings       bool     `name:"warnings" short:"w" negatable:"" default:"true" help:"Emit warnings."`

@@ -82,7 +82,7 @@ is left untouched.
 .BR \-v ", " \-\-verbose
 Increase verbosity.
 .B \-v
-logs progress per package and tree;
+logs the loaded package and path counts, per-tree progress and a scan summary;
 .B \-vv
 also logs per-file decisions, including checksum mismatches.
 .TP
@@ -123,7 +123,7 @@ Pattern forms:
 No \fB/\fR
 Glob matched against the basename, e.g.
 .IR "*~" ,
-.IR "core*" ,
+.IR "core" ,
 .IR ".*.sw?" .
 .TP
 Starts with \fB/\fR
@@ -170,7 +170,7 @@ credentials; uncomment lines to keep them out of the backup.
 .TP
 .I /etc/cron.d/deb-find-changes
 Runs nightly at midnight:
-.B deb-find-changes \-\-no\-warnings \-\-exclude\-from=/etc/deb-find-changes/exclude-etc \-O /var/cache/deb-find-changes/etc.txt /etc
+.B [ \-x /usr/bin/deb-find-changes ] && deb-find-changes \-\-no\-warnings \-\-exclude\-from=/etc/deb-find-changes/exclude-etc \-O /var/cache/deb-find-changes/etc.txt /etc
 .TP
 .I /var/cache/deb-find-changes/etc.txt
 The resulting list, read by

@@ -45,8 +45,11 @@ func Compile(pats []Pattern) (*Matcher, error) {
 		r, err := compileOne(p.Glob)
 		if err != nil {
 			where := ""
-			if p.Source != "" {
+			switch {
+			case p.Source != "" && p.Line > 0:
 				where = fmt.Sprintf(" (%s:%d)", p.Source, p.Line)
+			case p.Source != "":
+				where = fmt.Sprintf(" (%s)", p.Source)
 			}
 			return nil, fmt.Errorf("invalid exclude pattern %q%s: %w", p.Glob, where, err)
 		}

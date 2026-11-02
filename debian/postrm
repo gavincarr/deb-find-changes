@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+remove|purge)
+    # Delete the list (and any leftover atomic-write temp files) so a
+    # consumer fails loudly instead of backing up a frozen list.
+    rm -f /var/cache/deb-find-changes/etc.txt /var/cache/deb-find-changes/.etc.txt.*
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

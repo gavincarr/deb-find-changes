@@ -56,6 +56,22 @@ func TestWriteSkipsNewline(t *testing.T) {
 	}
 }
 
+func TestWriteSkipsCarriageReturn(t *testing.T) {
+	var logs bytes.Buffer
+	l := slog.New(slog.NewTextHandler(&logs, nil))
+	es := []scan.Entry{{Path: "/etc/a\rb", Kind: scan.Orphan}, {Path: "/etc/c", Kind: scan.Orphan}}
+	var b bytes.Buffer
+	if err := Write(&b, es, false, l); err != nil {
+		t.Fatal(err)
+	}
+	if got := b.String(); got != "/etc/c\n" {
+		t.Fatalf("got %q", got)
+	}
+	if n := strings.Count(logs.String(), "level=WARN"); n != 1 {
+		t.Fatalf("want 1 warn, got %d: %s", n, logs.String())
+	}
+}
+
 func tempLeftovers(t *testing.T, dir string, want int) {
 	t.Helper()
 	des, err := os.ReadDir(dir)

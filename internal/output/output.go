@@ -19,8 +19,8 @@ import (
 func Write(w io.Writer, entries []scan.Entry, withType bool, log *slog.Logger) error {
 	bw := bufio.NewWriter(w)
 	for _, e := range entries {
-		if strings.Contains(e.Path, "\n") {
-			log.Warn("skipping path containing newline", "path", e.Path)
+		if strings.ContainsAny(e.Path, "\n\r") {
+			log.Warn("skipping path containing newline or carriage return", "path", e.Path)
 			continue
 		}
 		if withType {

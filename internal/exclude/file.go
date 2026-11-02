@@ -17,6 +17,8 @@ func ParseFile(r io.Reader, source string) (pats []Pattern, pkgs []string, err e
 		line := strings.TrimSpace(sc.Text())
 		switch {
 		case line == "" || strings.HasPrefix(line, "#"):
+		case line == "@":
+			// bare "@" names no package; ignore it
 		case strings.HasPrefix(line, "@"):
 			pkgs = append(pkgs, line[1:])
 		default:

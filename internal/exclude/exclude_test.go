@@ -90,6 +90,33 @@ func TestMatchDir(t *testing.T) {
 	}
 }
 
+func TestCompileErrorNoLine(t *testing.T) {
+	_, err := Compile([]Pattern{{Glob: "[", Source: "command line"}})
+	if err == nil {
+		t.Fatal("expected error")
+	}
+	if strings.Contains(err.Error(), ":0") || !strings.Contains(err.Error(), "(command line)") {
+		t.Errorf("bad error text %q", err)
+	}
+}
+
+func TestDefaultCoreExcludes(t *testing.T) {
+	m, err := Compile([]Pattern{{Glob: "core"}, {Glob: "core.[0-9]*"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for p, want := range map[string]bool{
+		"/etc/x/core":                 true,
+		"/etc/x/core.1234":            true,
+		"/etc/systemd/coredump.conf":  false,
+		"/etc/X11/cursors/core.theme": false,
+	} {
+		if got := m.Match(p); got != want {
+			t.Errorf("Match(%q) = %v, want %v", p, got, want)
+		}
+	}
+}
+
 func TestCompileError(t *testing.T) {
 	_, err := Compile([]Pattern{{Glob: "[", Source: "exclude-etc", Line: 7}})
 	if err == nil {

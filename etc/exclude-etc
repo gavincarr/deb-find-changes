@@ -9,7 +9,8 @@
 .svn/
 .bzr/
 .hg/
-core*
+core
+core.[0-9]*
 
 # Generated / cache / runtime state
 /etc/alternatives

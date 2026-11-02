@@ -29,7 +29,8 @@ Exit status is 0 on success, 1 on runtime failure, 2 on usage error.
 
 The package installs a nightly cron job (`/etc/cron.d/deb-find-changes`)
 that writes the list to `/var/cache/deb-find-changes/etc.txt`, and runs an
-initial scan on first install.
+initial scan on first install. Removing the package (with or without
+purge) deletes the list, so a consumer never reads a stale one.
 
 ## Excludes
 

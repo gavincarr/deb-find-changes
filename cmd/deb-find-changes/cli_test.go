@@ -39,6 +39,13 @@ func TestGrammar(t *testing.T) {
 				t.Errorf("got %v", c.Exclude)
 			}
 		}},
+		{"no comma splitting", []string{"-x", "/etc/a,b", "--exclude-from", "x,y", "--exclude-pkg", "p,q", "/etc"}, func(t *testing.T, c *CLI) {
+			if !reflect.DeepEqual(c.Exclude, []string{"/etc/a,b"}) ||
+				!reflect.DeepEqual(c.ExcludeFrom, []string{"x,y"}) ||
+				!reflect.DeepEqual(c.ExcludePackage, []string{"p,q"}) {
+				t.Errorf("got %v %v %v", c.Exclude, c.ExcludeFrom, c.ExcludePackage)
+			}
+		}},
 		{"no-warnings", []string{"--no-warnings", "/etc"}, func(t *testing.T, c *CLI) {
 			if c.Warnings {
 				t.Error("Warnings should be false")
