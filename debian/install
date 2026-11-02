@@ -1,0 +1,2 @@
+bin/deb-find-changes usr/bin
+etc/exclude-etc etc/deb-find-changes

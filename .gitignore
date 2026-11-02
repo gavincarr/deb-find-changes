@@ -20,3 +20,9 @@
 /pkg/*.*/
 /src/*.*/
 /var/*
+/debian/deb-find-changes/
+/debian/.debhelper/
+/debian/files
+/debian/*.substvars
+/debian/debhelper-build-stamp
+/debian/*.debhelper.log

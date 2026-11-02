@@ -1,0 +1,24 @@
+Source: deb-find-changes
+Section: admin
+Priority: optional
+Maintainer: Gavin Carr <gavin@profound.net>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: deb-find-changes
+Architecture: amd64
+Depends: ${misc:Depends}
+Recommends: cron | cron-daemon
+Description: List orphaned and locally-modified files for backup on Debian
+ deb-find-changes walks one or more directory trees (default /etc) and
+ lists the files that are not owned by any installed dpkg package
+ (orphans) or that differ from their packaged checksums (modified). It
+ reads the dpkg database directly, so it is fast and needs no per-file
+ dpkg calls.
+ .
+ The list is intended for the extract backup tool. A nightly cron job
+ writes it to /var/cache/deb-find-changes/etc.txt, and an initial scan is
+ run when the package is first installed.
+ .
+ Distributed as a pure-Go statically-linked executable (CGO disabled).

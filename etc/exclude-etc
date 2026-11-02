@@ -1,0 +1,39 @@
+# Editor/backup/VCS noise
+*~
+*-
+*.old
+*.bak
+*.backup
+.*.sw?
+.git/
+.svn/
+.bzr/
+.hg/
+core*
+
+# Generated / cache / runtime state
+/etc/alternatives
+/etc/ld.so.cache
+/etc/.pwd.lock
+/etc/.updated
+/etc/mtab
+/etc/.java/.systemPrefs/.system.lock
+/etc/rc*.d
+/etc/ssl/certs
+/etc/udev/hwdb.bin
+/etc/console-setup/cached*
+/etc/*/log/main
+/etc/*/supervise
+
+# Secrets. These ARE backed up by default (matching rpm-find-changes).
+# Uncomment to keep private keys and credentials out of the backup
+# (and out of extract's git history). Note this can't catch secrets
+# embedded in ordinary config files (e.g. /etc/mysql/debian.cnf).
+#/etc/ssh/ssh_host_*_key
+#/etc/ssl/private
+#/etc/wireguard
+#/etc/krb5.keytab
+#/etc/shadow
+#/etc/gshadow
+#/etc/letsencrypt/archive
+#/etc/letsencrypt/keys

@@ -1,0 +1,5 @@
+deb-find-changes (0.1.0) unstable; urgency=medium
+
+  * Initial release.
+
+ -- Gavin Carr <gavin@profound.net>  Mon, 02 Nov 2026 14:12:42 +0800

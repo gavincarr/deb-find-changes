@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+configure)
+    # Initial scan, so a fresh host isn't reported as failed until the
+    # first midnight cron run. Never fails the install.
+    if [ ! -e /var/cache/deb-find-changes/etc.txt ]; then
+        /usr/bin/deb-find-changes --no-warnings --exclude-from=/etc/deb-find-changes/exclude-etc -O /var/cache/deb-find-changes/etc.txt /etc || echo "deb-find-changes: initial scan failed; the nightly cron job will retry" >&2
+    fi
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

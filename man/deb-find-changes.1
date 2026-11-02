@@ -1,0 +1,193 @@
+.TH DEB-FIND-CHANGES 1 "November 2026" "deb-find-changes 0.1.0" "System Administration"
+.SH NAME
+deb-find-changes \- list orphaned and locally modified files on Debian systems
+.SH SYNOPSIS
+.B deb-find-changes
+.RI [ options ]
+.RI [ path " ...]"
+.SH DESCRIPTION
+.B deb-find-changes
+walks the given directory trees (typically
+.IR /etc )
+and prints, one absolute path per line, the files that dpkg does not
+fully account for, so that a backup tool such as
+.B extract
+can save just those files.
+.PP
+Two kinds of file are reported.
+An
+.B orphan
+is a regular file (or a symlink to one) that is not owned by any
+installed package and is not in the ucf registry.
+A
+.B modified
+file is owned by a package, or registered with ucf, but fails
+verification: its MD5 checksum differs from the one recorded in
+.I /var/lib/dpkg/info/*.md5sums
+or in the
+.B Conffiles
+field of
+.IR /var/lib/dpkg/status ,
+or from the ucf hash.
+Owned files with no checksum available, or that cannot be read, are
+also reported as modified.
+Conffiles of removed-but-not-purged (rc) packages are still verified.
+Directories, dangling symlinks and special files are ignored.
+.PP
+The dpkg and ucf databases are read directly; no
+.BR dpkg (1)
+process is run per file.
+Results are written to standard output (or to a file with
+.BR \-O );
+warnings and progress messages go to standard error.
+.SH OPTIONS
+.TP
+.BR \-m ", " \-\-show\-modified
+Report only modified files.
+.TP
+.BR \-o ", " \-\-show\-orphans
+Report only orphans.
+By default both modified files and orphans are reported.
+.TP
+.BR \-t ", " \-\-type
+Prefix each line with its type: M (modified) or O (orphan), followed by a space.
+.TP
+.BI \-x ", " \-\-exclude= GLOB
+Exclude files matching
+.IR GLOB .
+May be repeated.
+See
+.BR EXCLUDES .
+.TP
+.BI \-\-exclude\-from= FILE
+Read exclude patterns from
+.IR FILE ,
+one per line.
+May be repeated.
+A missing or unreadable file is a warning, not an error.
+.TP
+.BI \-\-exclude\-package= PKG
+Exclude all files owned by package
+.IR PKG .
+May be repeated.
+.TP
+.BI \-O ", " \-\-output= FILE
+Write the list atomically to
+.I FILE
+(mode 0600) instead of standard output.
+On failure any previous
+.I FILE
+is left untouched.
+.TP
+.BR \-v ", " \-\-verbose
+Increase verbosity.
+.B \-v
+logs progress per package and tree;
+.B \-vv
+also logs per-file decisions, including checksum mismatches.
+.TP
+.BR \-w ", " \-\-warnings ", " \-\-no\-warnings
+Emit (default) or suppress warnings.
+.TP
+.BI \-\-admindir= DIR
+dpkg administrative directory (default
+.IR /var/lib/dpkg ).
+.TP
+.BI \-\-ucf\-dir= DIR
+ucf state directory (default
+.IR /var/lib/ucf ).
+.TP
+.B \-\-version
+Print the version and exit.
+.TP
+.BR \-h ", " \-\-help
+Show help and exit.
+.PP
+Each
+.I path
+must be an existing directory; relative paths are made absolute.
+.SH EXCLUDES
+Patterns come from
+.BR \-\-exclude ,
+.BR \-\-exclude\-from
+files and
+.BR \-\-exclude\-package .
+In an exclude file, blank lines and lines starting with
+.B #
+are ignored, and a line of the form
+.BI @ package
+excludes that package (its files are neither verified nor reported).
+.PP
+Pattern forms:
+.TP
+No \fB/\fR
+Glob matched against the basename, e.g.
+.IR "*~" ,
+.IR "core*" ,
+.IR ".*.sw?" .
+.TP
+Starts with \fB/\fR
+Glob matched against the full path, or any leading path prefix ending at a
+.B /
+boundary, so a directory excludes its subtree, e.g.
+.IR /etc/alternatives ,
+.IR "/etc/rc*.d" .
+.TP
+Trailing \fB/\fR
+Directory name anywhere in the path, e.g.
+.IR .git/ .
+.TP
+Other, containing \fB/\fR
+Glob matched against any
+.BR / -aligned
+suffix of the path, e.g.
+.IR "ssl/private/*" .
+.PP
+Glob metacharacters are
+.B *
+(any run of characters, including
+.BR / ),
+.B ?
+(one character) and
+.BR [...] .
+A pattern that fails to compile is a usage error.
+.PP
+The following are always excluded:
+.IR *.dpkg\-dist ,
+.IR *.dpkg\-old ,
+.IR *.dpkg\-new ,
+.IR *.dpkg\-tmp ,
+.IR *.dpkg\-bak ,
+.IR *.ucf\-dist ,
+.IR *.ucf\-old ,
+.IR *.ucf\-new .
+.SH FILES
+.TP
+.I /etc/deb-find-changes/exclude-etc
+Default exclude file (a conffile).
+It ends with a commented-out block of patterns for private keys and
+credentials; uncomment lines to keep them out of the backup.
+.TP
+.I /etc/cron.d/deb-find-changes
+Runs nightly at midnight:
+.B deb-find-changes \-\-no\-warnings \-\-exclude\-from=/etc/deb-find-changes/exclude-etc \-O /var/cache/deb-find-changes/etc.txt /etc
+.TP
+.I /var/cache/deb-find-changes/etc.txt
+The resulting list, read by
+.BR extract .
+It is also created when the package is first installed.
+.SH EXIT STATUS
+.TP
+.B 0
+Success (warnings do not change this).
+.TP
+.B 1
+Runtime failure, e.g. the dpkg admin directory is unreadable or the output
+file cannot be written.
+.TP
+.B 2
+Usage error.
+.SH SEE ALSO
+.BR dpkg (1),
+.BR debsums (1),
+.BR extract
